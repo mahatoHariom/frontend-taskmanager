@@ -39,6 +39,7 @@ export interface TasksResponse {
 export interface AuthResponse {
     message: string;
     user: User;
+    token?: string;
 }
 
 export interface CreateTaskData {
