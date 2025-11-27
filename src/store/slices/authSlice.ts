@@ -6,10 +6,9 @@ interface AuthState {
     isAuthenticated: boolean;
 }
 
-const token = localStorage.getItem('token');
 const initialState: AuthState = {
     user: null,
-    isAuthenticated: !!token,
+    isAuthenticated: false, // Will be set to true when user data is loaded
 };
 
 const authSlice = createSlice({
@@ -23,7 +22,6 @@ const authSlice = createSlice({
         clearUser: (state) => {
             state.user = null;
             state.isAuthenticated = false;
-            localStorage.removeItem('token');
         },
     },
 });
