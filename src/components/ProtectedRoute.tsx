@@ -1,7 +1,5 @@
 import { ReactNode } from 'react';
 import { Navigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/store/store';
 import { useCurrentUser } from '@/hooks/useAuth';
 
 interface ProtectedRouteProps {
@@ -9,8 +7,7 @@ interface ProtectedRouteProps {
 }
 
 export default function ProtectedRoute({ children }: ProtectedRouteProps) {
-    const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
-    const { isLoading, isError } = useCurrentUser();
+    const { isLoading, isError, data } = useCurrentUser();
 
     // Show loading state while checking authentication
     if (isLoading) {
@@ -21,8 +18,9 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
         );
     }
 
-    // Redirect to login if not authenticated
-    if (isError || !isAuthenticated) {
+    // Redirect to login if authentication check failed or no user data
+    // Only check after loading is complete to avoid race conditions
+    if (isError || !data) {
         return <Navigate to="/login" replace />;
     }
 
