@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useTasks } from '@/hooks/useTasks';
+import { useLogout } from '@/hooks/useAuth';
 import { Task } from '@/types';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -10,10 +11,11 @@ import TaskCard from '@/components/TaskCard';
 import TaskDialog from '@/components/TaskDialog';
 import DeleteTaskDialog from '@/components/DeleteTaskDialog';
 import { Sidebar } from '@/components/Sidebar';
-import { Plus, ChevronLeft, ChevronRight, ListTodo, AlertCircle, Clock } from 'lucide-react';
+import { Plus, ChevronLeft, ChevronRight, ListTodo, AlertCircle, Clock, LogOut, CheckSquare } from 'lucide-react';
 
 export default function Dashboard() {
     const [searchParams, setSearchParams] = useSearchParams();
+    const logoutMutation = useLogout();
 
     // Get state from URL params
     const page = parseInt(searchParams.get('page') || '1');
@@ -67,6 +69,10 @@ export default function Dashboard() {
         setTaskDialogOpen(true);
     };
 
+    const handleLogout = () => {
+        logoutMutation.mutate();
+    };
+
     const handleSortChange = (value: string) => {
         const [newSortBy, newSortOrder] = value.split('-');
         updateUrlParams({
@@ -97,6 +103,19 @@ export default function Dashboard() {
             {/* Main Content */}
             <main className="flex-1 md:pl-64">
                 <div className="container mx-auto p-6 md:p-8 max-w-7xl">
+                    {/* Mobile Header */}
+                    <div className="md:hidden flex items-center justify-between mb-8">
+                        <div className="flex items-center gap-2">
+                            <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
+                                <CheckSquare className="h-5 w-5 text-primary-foreground" />
+                            </div>
+                            <h2 className="text-xl font-bold tracking-tight text-primary">TaskManager</h2>
+                        </div>
+                        <Button variant="ghost" size="icon" onClick={handleLogout}>
+                            <LogOut className="h-5 w-5" />
+                        </Button>
+                    </div>
+
                     {/* Header */}
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
                         <div>
