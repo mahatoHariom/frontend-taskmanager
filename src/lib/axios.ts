@@ -24,10 +24,8 @@ apiClient.interceptors.response.use(
         return response;
     },
     (error) => {
-        if (error.response?.status === 401) {
-            // Redirect to login on unauthorized
-            window.location.href = '/login';
-        }
+        // Don't auto-redirect on 401 - let ProtectedRoute handle it
+        // to avoid redirect loops
         return Promise.reject(error);
     }
 );
