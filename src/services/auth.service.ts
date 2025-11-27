@@ -1,5 +1,5 @@
 import apiClient from '@/lib/axios';
-import { AuthResponse, User } from '@/types';
+import { AuthResponse } from '@/types';
 
 export const authService = {
     async register(name: string, email: string, password: string): Promise<AuthResponse> {
@@ -24,8 +24,4 @@ export const authService = {
         return response.data;
     },
 
-    async getCurrentUser(): Promise<{ user: User }> {
-        const response = await apiClient.get<{ user: User }>('/me');
-        return response.data;
-    },
 };

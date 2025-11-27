@@ -1,32 +1,16 @@
 import { ReactNode } from 'react';
 import { Navigate } from 'react-router-dom';
-import { useCurrentUser } from '@/hooks/useAuth';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
 
 interface ProtectedRouteProps {
     children: ReactNode;
 }
 
 export default function ProtectedRoute({ children }: ProtectedRouteProps) {
-    const { isLoading, isError, data } = useCurrentUser();
-    const token = localStorage.getItem('token');
+    const { isAuthenticated } = useSelector((state: RootState) => state.auth);
 
-    // Immediate redirect if no token exists
-    if (!token) {
-        return <Navigate to="/login" replace />;
-    }
-
-    // Show loading state while checking authentication
-    if (isLoading) {
-        return (
-            <div className="min-h-screen flex items-center justify-center">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-            </div>
-        );
-    }
-
-    // Redirect to login if authentication check failed or no user data
-    // Only check after loading is complete to avoid race conditions
-    if (isError || !data) {
+    if (!isAuthenticated) {
         return <Navigate to="/login" replace />;
     }
 
