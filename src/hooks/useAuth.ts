@@ -79,5 +79,6 @@ export function useCurrentUser() {
         },
         retry: false,
         staleTime: 5 * 60 * 1000, // 5 minutes
+        enabled: !!localStorage.getItem('token'), // Only run if token exists
     });
 }

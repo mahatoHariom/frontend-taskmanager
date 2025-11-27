@@ -8,6 +8,12 @@ interface ProtectedRouteProps {
 
 export default function ProtectedRoute({ children }: ProtectedRouteProps) {
     const { isLoading, isError, data } = useCurrentUser();
+    const token = localStorage.getItem('token');
+
+    // Immediate redirect if no token exists
+    if (!token) {
+        return <Navigate to="/login" replace />;
+    }
 
     // Show loading state while checking authentication
     if (isLoading) {
