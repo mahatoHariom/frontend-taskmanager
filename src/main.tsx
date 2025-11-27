@@ -5,8 +5,11 @@ import { Toaster } from '@/components/ui/sonner'
 import { Provider } from 'react-redux'
 import { ThemeProvider } from '@/components/theme-provider'
 import { store } from './store/store'
+import { setupInterceptors } from '@/lib/axios'
 import './index.css'
 import App from './App.tsx'
+
+setupInterceptors(store);
 
 const queryClient = new QueryClient({
   defaultOptions: {
