@@ -59,6 +59,7 @@ export function useLogout() {
             dispatch(clearUser());
             queryClient.clear();
             toast.success('Logged out successfully');
+            window.location.href = '/login'; // Force navigation
         },
         onError: (error: any) => {
             const message = error.response?.data?.error || 'Logout failed';
