@@ -19,8 +19,8 @@ export default function Dashboard() {
 
     // Get state from URL params
     const page = parseInt(searchParams.get('page') || '1');
-    const sortBy = searchParams.get('sortBy') || 'createdAt';
-    const sortOrder = (searchParams.get('sortOrder') || 'desc') as 'asc' | 'desc';
+    const sortBy = searchParams.get('sortBy') || 'endDate';
+    const sortOrder = (searchParams.get('sortOrder') || 'asc') as 'asc' | 'desc';
     const priority = searchParams.get('priority') || 'ALL';
 
     // Fetch tasks using React Query
@@ -162,33 +162,55 @@ export default function Dashboard() {
 
                     {/* Filters & Content */}
                     <div className="space-y-4">
-                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                            <h2 className="text-xl font-semibold tracking-tight">Your Tasks</h2>
-                            <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-                                <Select value={priority} onValueChange={handlePriorityFilterChange}>
-                                    <SelectTrigger className="w-full sm:w-[150px]">
-                                        <SelectValue placeholder="Filter by Priority" />
+                        {/* Priority Tabs */}
+                        <div className="flex flex-col gap-4">
+                            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                                <h2 className="text-xl font-semibold tracking-tight">Your Tasks</h2>
+                                <Select value={`endDate-${sortOrder}`} onValueChange={handleSortChange}>
+                                    <SelectTrigger className="w-full sm:w-[200px]">
+                                        <SelectValue placeholder="Sort by Due Date" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="ALL">All Priorities</SelectItem>
-                                        <SelectItem value="LOW">Low</SelectItem>
-                                        <SelectItem value="MEDIUM">Medium</SelectItem>
-                                        <SelectItem value="HIGH">High</SelectItem>
+                                        <SelectItem value="endDate-asc">Due Date (Earliest First)</SelectItem>
+                                        <SelectItem value="endDate-desc">Due Date (Latest First)</SelectItem>
                                     </SelectContent>
                                 </Select>
-                                <Select value={`${sortBy}-${sortOrder}`} onValueChange={handleSortChange}>
-                                    <SelectTrigger className="w-full sm:w-[180px]">
-                                        <SelectValue placeholder="Sort by" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="createdAt-desc">Newest First</SelectItem>
-                                        <SelectItem value="createdAt-asc">Oldest First</SelectItem>
-                                        <SelectItem value="endDate-asc">Due Date (Earliest)</SelectItem>
-                                        <SelectItem value="endDate-desc">Due Date (Latest)</SelectItem>
-                                        <SelectItem value="priority-desc">Priority (High to Low)</SelectItem>
-                                        <SelectItem value="priority-asc">Priority (Low to High)</SelectItem>
-                                    </SelectContent>
-                                </Select>
+                            </div>
+
+                            {/* Priority Filter Tabs */}
+                            <div className="flex gap-2 overflow-x-auto pb-2">
+                                <Button
+                                    variant={priority === 'ALL' ? 'default' : 'outline'}
+                                    size="sm"
+                                    onClick={() => handlePriorityFilterChange('ALL')}
+                                    className="whitespace-nowrap"
+                                >
+                                    All Tasks
+                                </Button>
+                                <Button
+                                    variant={priority === 'LOW' ? 'default' : 'outline'}
+                                    size="sm"
+                                    onClick={() => handlePriorityFilterChange('LOW')}
+                                    className="whitespace-nowrap"
+                                >
+                                    Low Priority
+                                </Button>
+                                <Button
+                                    variant={priority === 'MEDIUM' ? 'default' : 'outline'}
+                                    size="sm"
+                                    onClick={() => handlePriorityFilterChange('MEDIUM')}
+                                    className="whitespace-nowrap"
+                                >
+                                    Medium Priority
+                                </Button>
+                                <Button
+                                    variant={priority === 'HIGH' ? 'default' : 'outline'}
+                                    size="sm"
+                                    onClick={() => handlePriorityFilterChange('HIGH')}
+                                    className="whitespace-nowrap"
+                                >
+                                    High Priority
+                                </Button>
                             </div>
                         </div>
 
